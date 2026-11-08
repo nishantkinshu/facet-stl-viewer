@@ -17,18 +17,15 @@ A simple Android app to look at STL files (the 3D files used for 3D printing and
 
 You only need to do **one** of these.
 
-### Way 1: GitHub builds it for you (free, nothing to install)
+### Way 1: GitHub builds it for you (already set up)
 
-GitHub is a website that stores code. It can also run Google's official Android tools for you and hand back the finished APK.
+Every time code in this repository changes, GitHub builds a fresh APK by itself (takes about 2 minutes).
 
-1. Make a free account at github.com and sign in.
-2. Click **+** (top right) → **New repository**. Name it `facet`, choose **Private**, click **Create repository**.
-3. On the next page click **uploading an existing file**. Unzip this folder on your laptop, open it, select **everything inside** (including the `.github` folder) and drag it onto the page. Click **Commit changes**.
-4. Open the **Actions** tab. A job called **Build APK** starts by itself. Wait about 3–5 minutes for the green tick.
-5. Click the finished job, scroll down to **Artifacts**, and download **Facet-APK**. It downloads as a .zip; unzip it to get `app-debug.apk`.
-6. Copy `app-debug.apk` to your phone and tap it. Android will ask you to allow installing apps from that source; allow it and tap **Install**.
+1. Open the **Releases** page of this repository (right side of the main page, or `/releases`).
+2. Under the newest **Facet build N**, tap **Facet-build-N.apk** to download it.
+3. Open the APK on your phone. Android will ask to allow installing apps from that source; allow it and tap **Install**.
 
-If the Actions tab shows nothing, the `.github` folder did not upload (Windows sometimes hides folders starting with a dot). In GitHub click **Add file → Create new file**, type the name `.github/workflows/build-apk.yml`, paste in the contents of that file from this folder, and click **Commit**.
+To build again without changing anything: **Actions** tab → **Build APK** → **Run workflow**.
 
 ### Way 2: Android Studio on your laptop
 
@@ -45,7 +42,7 @@ Android Studio is Google's free app for building Android apps.
 - **App icon**: `app/src/main/res/drawable/ic_launcher_foreground.xml` and the `mipmap-*` folders.
 - **Version number**: `versionCode` and `versionName` in `app/build.gradle`. Raise `versionCode` by 1 each time so your phone treats the new APK as an update.
 
-Every build is signed with the same key (`app/facet-debug.keystore`), so a new APK installs over the old one without uninstalling. Keep the repository private, because that key is in it.
+If `app/facet-debug.keystore` (the app's signing key) is uploaded, every build is signed with that same key, so a new APK installs over the old one without uninstalling. Without it, Android may ask you to uninstall the old version before installing a new build.
 
 ## Folder map
 
