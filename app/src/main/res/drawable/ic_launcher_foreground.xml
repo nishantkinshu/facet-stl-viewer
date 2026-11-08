@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A faceted pyramid: three triangles, like the facets inside an STL file. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#5FD3C2" android:pathData="M54,30 L54,61 L30,74 Z" />
+    <path android:fillColor="#2FA897" android:pathData="M54,30 L78,74 L54,61 Z" />
+    <path android:fillColor="#1C7E71" android:pathData="M30,74 L54,61 L78,74 Z" />
+</vector>
