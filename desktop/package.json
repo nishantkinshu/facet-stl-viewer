@@ -1,0 +1,44 @@
+{
+  "name": "facet",
+  "productName": "Facet",
+  "version": "1.0.0",
+  "description": "Facet STL viewer for Windows",
+  "author": "Nishant",
+  "license": "MIT",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.9.0",
+    "electron-builder": "26.17.0"
+  },
+  "build": {
+    "appId": "com.tadaaprojects.facet",
+    "productName": "Facet",
+    "copyright": "Copyright © 2026 Nishant",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "www/**/*"],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Facet",
+      "include": "build/installer.nsh",
+      "artifactName": "Facet-Windows-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "Facet-Windows-Portable-${version}.exe"
+    }
+  }
+}

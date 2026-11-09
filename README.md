@@ -1,6 +1,6 @@
 # Facet STL Viewer
 
-A simple Android app to look at STL files (the 3D files used for 3D printing and CNC).
+A simple app for Android and Windows to look at STL files (the 3D files used for 3D printing and CNC).
 
 ## What it does
 
@@ -14,21 +14,25 @@ A simple Android app to look at STL files (the 3D files used for 3D printing and
 - Made for phones and tablets, upright or sideways. On tablets and sideways phones, Info and Settings open as side panels so the model stays visible.
 - Works fully offline. Needs Android 7.0 or newer.
 
-## Getting the APK (the installable app file)
+## Getting the apps
 
-You only need to do **one** of these.
-
-### Way 1: GitHub builds it for you (already set up)
-
-Every time code in this repository changes, GitHub builds a fresh APK by itself (takes about 2 minutes).
+Every time code in this repository changes, GitHub builds the Android app and the Windows app by itself. This takes about 5–8 minutes.
 
 1. Open the **Releases** page of this repository (right side of the main page, or `/releases`).
-2. Under the newest **Facet build N**, tap **Facet-build-N.apk** to download it.
-3. Open the APK on your phone. Android will ask to allow installing apps from that source; allow it and tap **Install**.
+2. Under the newest **Facet 1.0.N**, download the file for your device:
+   - **Android phone or tablet:** `Facet-Android-1.0.N.apk`. Open it on the device; Android will ask to allow installing apps from that source; allow it and tap **Install**.
+   - **Windows, installed:** `Facet-Windows-Setup-1.0.N.exe`. Run it and follow the steps. It adds Facet to the Start menu and desktop, and to **Open with** (right-click a file in File Explorer) for .stl files. Your current default program for those files is not changed.
+   - **Windows, no install:** `Facet-Windows-Portable-1.0.N.exe`. Double-click to run from any folder or USB stick. It starts a little slower because it unpacks itself each time.
 
-To build again without changing anything: **Actions** tab → **Build APK** → **Run workflow**.
+Windows may show a blue **"Windows protected your PC"** box the first time, because the app isn't signed with a paid certificate. Click **More info → Run anyway**.
 
-### Way 2: Android Studio on your laptop
+On Windows: **Ctrl+O** opens a file, **F11** is full screen, **Esc** closes panels, and you can drag a file onto the window.
+
+To build again without changing anything: **Actions** tab → **Build apps** → **Run workflow**.
+
+The Android app's signing key is kept out of this repository. It is stored as a private GitHub secret named `FACET_KEYSTORE` (Settings → Secrets and variables → Actions). With it, every build is signed the same way, so a new APK installs over the old one as an update.
+
+### Optional: build the Android app yourself with Android Studio
 
 Android Studio is Google's free app for building Android apps.
 
@@ -43,7 +47,6 @@ Android Studio is Google's free app for building Android apps.
 - **App icon**: `app/src/main/res/drawable/ic_launcher_foreground.xml` and the `mipmap-*` folders.
 - **Version number**: `versionCode` and `versionName` in `app/build.gradle`. Raise `versionCode` by 1 each time so your phone treats the new APK as an update.
 
-The app's signing key is kept out of this public repository. It is stored as a private GitHub secret named `FACET_KEYSTORE` (Settings → Secrets and variables → Actions). With that secret set, every build is signed the same way, so a new APK installs over the old one as an update. Without it, Android may ask you to uninstall the old version first.
 
 ## Folder map
 
@@ -51,8 +54,9 @@ The app's signing key is kept out of this public repository. It is stored as a p
 web/index.html          the viewer screen, tools and settings (edit this)
 web/lib, web/fonts      3D library (three.js, MIT licence) and fonts (Open Font Licence)
 app/src/main/...        the Android wrapper around the viewer
+desktop/                the Windows wrapper (Electron): main.js, installer settings, icon
 tools/build_web.py      copies the viewer into the Android app
-.github/workflows/      instructions GitHub follows to build the APK
+.github/workflows/      instructions GitHub follows to build the Android and Windows apps
 ```
 
 ## License
