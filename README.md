@@ -11,6 +11,7 @@ A simple Android app to look at STL files (the 3D files used for 3D printing and
 - **Wire** shows the triangle mesh. **Measure**: tap two points to see the distance, with X, Y and Z parts.
 - **Info** shows size, volume, surface area, triangle count, file size, and an estimated weight if printed solid in PLA.
 - **Settings** (top-right): model colour, Z-up or Y-up, slow spin, background, floor grid, axis arrows, and mm or inch. Settings are remembered.
+- Made for phones and tablets, upright or sideways. On tablets and sideways phones, Info and Settings open as side panels so the model stays visible.
 - Works fully offline. Needs Android 7.0 or newer.
 
 ## Getting the APK (the installable app file)
@@ -42,7 +43,7 @@ Android Studio is Google's free app for building Android apps.
 - **App icon**: `app/src/main/res/drawable/ic_launcher_foreground.xml` and the `mipmap-*` folders.
 - **Version number**: `versionCode` and `versionName` in `app/build.gradle`. Raise `versionCode` by 1 each time so your phone treats the new APK as an update.
 
-If `app/facet-debug.keystore` (the app's signing key) is uploaded, every build is signed with that same key, so a new APK installs over the old one without uninstalling. Without it, Android may ask you to uninstall the old version before installing a new build.
+The app's signing key is kept out of this public repository. It is stored as a private GitHub secret named `FACET_KEYSTORE` (Settings → Secrets and variables → Actions). With that secret set, every build is signed the same way, so a new APK installs over the old one as an update. Without it, Android may ask you to uninstall the old version first.
 
 ## Folder map
 

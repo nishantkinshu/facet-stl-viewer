@@ -23,6 +23,7 @@
   --font-label: "Barlow Condensed", "Barlow", system-ui, sans-serif;
   --font-num: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --r: 12px;
+  --top-h: 74px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -80,7 +81,7 @@ svg { display: block; }
 .strip button { height: 40px; border-radius: 10px; font-family: var(--font-label); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-size: 13px; }
 .strip button:active, .strip button.flash { background: var(--accent-soft); color: var(--accent); }
 
-.card { border-radius: 16px; padding: 14px 16px; }
+.card { box-sizing: border-box; border-radius: 16px; padding: 14px 16px; max-height: 46vh; overflow-y: auto; overscroll-behavior: contain; }
 .card h2 { font-family: var(--font-label); font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin: 0; }
 .stats div { min-width: 0; }
@@ -91,7 +92,7 @@ svg { display: block; }
 .note { margin: 10px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 
 /* Measure chip */
-.chip { position: absolute; left: 50%; transform: translateX(-50%); top: 84px; display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border-radius: 999px; max-width: calc(100% - 32px); }
+.chip { position: absolute; left: 50%; transform: translateX(-50%); top: var(--top-h); display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border-radius: 999px; max-width: calc(100% - 32px); }
 .chip .ctext { min-width: 0; font-size: 14px; }
 .chip .dist { font-family: var(--font-num); font-weight: 500; font-size: 17px; color: var(--mark); font-variant-numeric: tabular-nums; }
 .chip .deltas { display: block; font-family: var(--font-num); font-size: 11px; color: var(--muted); white-space: nowrap; }
@@ -104,10 +105,6 @@ svg { display: block; }
   padding-block: 8px calc(20px + env(safe-area-inset-bottom, 0px)); padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
   animation: rise 0.22s ease-out; }
 @keyframes rise { from { transform: translateY(24px); opacity: 0.4; } to { transform: none; opacity: 1; } }
-@media (min-width: 760px) {
-  .sheet { left: auto; top: 12px; bottom: 12px; right: 12px; width: 360px; max-height: none; border-radius: 18px; border: 1px solid var(--line); }
-  .grabber { display: none; }
-}
 .grabber { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 6px; }
 .sheethead { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 4px; }
 .sheethead h2 { margin: 0; font-size: 20px; font-weight: 600; }
@@ -135,12 +132,34 @@ svg { display: block; }
 #loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; background: color-mix(in srgb, var(--bg) 70%, transparent); font-weight: 500; }
 .spinner { width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-#toast { position: absolute; left: 50%; top: 84px; transform: translateX(-50%); width: min(440px, calc(100% - 32px)); padding: 12px 16px; border-radius: 12px; background: var(--fg); color: var(--bg); font-size: 14px; line-height: 1.4; box-shadow: var(--shadow); }
+#toast { position: absolute; left: 50%; top: var(--top-h); z-index: 5; transform: translateX(-50%); width: min(440px, calc(100% - 32px)); padding: 12px 16px; border-radius: 12px; background: var(--fg); color: var(--bg); font-size: 14px; line-height: 1.4; box-shadow: var(--shadow); }
 #dropHint { position: absolute; inset: 12px; border: 2px dashed var(--accent); border-radius: 18px; display: grid; place-items: center; font-size: 18px; font-weight: 600; color: var(--accent); background: var(--accent-soft); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .sheet { animation: none; } .spinner { animation-duration: 2s; } }
 @media (max-width: 520px) { .btn .optlabel { display: none; } .btn { padding: 0 14px; } }
-@media (min-width: 760px) {
-  .bottom > #infoCard { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); bottom: 12px; width: 300px; }
+/* Tablets, and any phone held sideways: side panels instead of bottom sheets */
+@media (min-width: 760px), (orientation: landscape) and (max-height: 560px) {
+  .sheet { left: auto; top: 12px; bottom: 12px; right: max(12px, env(safe-area-inset-right, 0px)); width: 360px; max-width: calc(100% - 24px); max-height: none; border-radius: 18px; border: 1px solid var(--line); padding-bottom: 20px; }
+  .grabber { display: none; }
+  .bottom > #infoCard { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); top: calc(var(--top-h) + 4px); width: 300px; max-width: calc(100vw - 32px); max-height: calc(100vh - var(--top-h) - 100px); }
+}
+/* Phones held sideways: everything a little more compact */
+@media (orientation: landscape) and (max-height: 560px) {
+  :root { --top-h: 62px; }
+  .topbar { padding-block: 8px; }
+  .titlecard { padding: 5px 10px 5px 6px; }
+  .mark { width: 30px; height: 30px; }
+  .btn, .iconbtn { height: 44px; }
+  .iconbtn { width: 44px; }
+  .bottom { padding-block: 0 8px; gap: 8px; }
+  .bottom > .dock, .bottom > .strip { max-width: 470px; }
+  .tool { flex-direction: row; justify-content: center; gap: 5px; padding: 9px 2px; }
+  .strip button { height: 34px; }
+  .bottom > #infoCard { max-height: calc(100vh - var(--top-h) - 128px); }
+}
+/* Large tablets: a roomier dock */
+@media (min-width: 1000px) and (min-height: 700px) {
+  .bottom > .dock, .bottom > .strip { max-width: 580px; }
+  .tool { padding: 10px 2px 9px; }
 }
 </style>
 
@@ -275,7 +294,7 @@ svg { display: block; }
 
     <div class="group">
       <button class="linkbtn" id="resetBtn">Reset all settings</button>
-      <div class="foot">Facet 1.0 · Opens binary and ASCII STL files.</div>
+      <div class="foot">Facet · Opens binary and ASCII STL files.</div>
     </div>
   </aside>
 
@@ -437,8 +456,10 @@ svg { display: block; }
     var box = new THREE.Box3().setFromObject(holder);
     var center = box.getCenter(new V3());
     var r = box.getSize(new V3()).length() / 2 || 1;
-    var vf = THREE.MathUtils.degToRad(camera.fov);
-    var hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
+    var fr = freeArea();
+    var vf = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * fr.h);
+    var hf = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect * fr.w);
+    lastView = view; userMoved = false;
     var dist = (r / Math.sin(Math.min(vf, hf) / 2)) * 1.08;
     var dir = new V3().fromArray(DIRS[view] || DIRS.iso).normalize();
     var toPos = center.clone().addScaledVector(dir, dist);
@@ -459,13 +480,45 @@ svg { display: block; }
     camera.position.copy(controls.target).addScaledVector(dir, tw.len0 + (tw.len1 - tw.len0) * e);
     if (k >= 1) tw = null;
   }
-  controls.addEventListener('start', function () { tw = null; });
+  controls.addEventListener('start', function () { tw = null; userMoved = true; });
+
+  /* Keep the model clear of the details card: beside it on tablets and sideways phones, above it on upright phones. */
+  var lastView = 'iso', userMoved = false;
+  function cardBox() {
+    var c = $('infoCard');
+    if (c.hidden) return null;
+    return { r: c.getBoundingClientRect(), side: getComputedStyle(c).position === 'fixed' };
+  }
+  function freeArea() {
+    var w = vp.clientWidth || 1, h = vp.clientHeight || 1, b = cardBox();
+    if (!b) return { w: 1, h: 1 };
+    if (b.side) return { w: Math.max(0.4, (w - b.r.right) / w), h: 1 };
+    var top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--top-h')) || 74;
+    return { w: 1, h: Math.max(0.3, (b.r.top - top) / h) };
+  }
+  function updateViewOffset() {
+    var w = vp.clientWidth, h = vp.clientHeight, b = cardBox();
+    if (!w || !h) return;
+    var dx = 0, dy = 0;
+    if (b && b.side) dx = -Math.min(w * 0.3, b.r.right / 2);
+    else if (b) {
+      var top = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--top-h')) || 74;
+      dy = Math.max(0, (h - top - b.r.top) / 2);
+    }
+    if (dx || dy) camera.setViewOffset(w, h, dx, dy, w, h); else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+  }
+  function layoutChanged() {
+    updateViewOffset();
+    if (mesh && !userMoved) fit(lastView, false);
+  }
 
   function resize() {
     var w = vp.clientWidth, h = vp.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
+    layoutChanged();
   }
   if (window.ResizeObserver) new ResizeObserver(resize).observe(vp); else window.addEventListener('resize', resize);
   resize();
@@ -554,7 +607,12 @@ svg { display: block; }
     b.addEventListener('click', function () { fit(b.dataset.view, true); });
   });
   $('wireBtn').addEventListener('click', function () { material.wireframe = !material.wireframe; press('wireBtn', material.wireframe); });
-  $('infoBtn').addEventListener('click', function () { var c = $('infoCard'); c.hidden = !c.hidden; press('infoBtn', !c.hidden); });
+  function setInfo(open) {
+    $('infoCard').hidden = !open; press('infoBtn', open);
+    updateViewOffset();
+    if (mesh && !userMoved) fit(lastView, true);
+  }
+  $('infoBtn').addEventListener('click', function () { setInfo($('infoCard').hidden); });
 
   /* Measure: tap two points on the surface */
   var measuring = false, pts = [], ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
@@ -664,7 +722,7 @@ svg { display: block; }
     if (!$('settings').hidden) { closeSettings(); return true; }
     if (measuring) { setMeasure(false); return true; }
     if (!$('viewStrip').hidden) { $('viewStrip').hidden = true; press('viewsBtn', false); return true; }
-    if (!$('infoCard').hidden) { $('infoCard').hidden = true; press('infoBtn', false); return true; }
+    if (!$('infoCard').hidden) { setInfo(false); return true; }
     return false;
   };
 
@@ -697,7 +755,7 @@ svg { display: block; }
   applyBackground();
   var g = sampleGear();
   showModel(g, 'Sample gear', 0, true);
-  if (window.innerWidth >= 760) { $('infoCard').hidden = false; press('infoBtn', true); }
+  if (window.innerWidth >= 760) { $('infoCard').hidden = false; press('infoBtn', true); layoutChanged(); }
   requestAnimationFrame(loop);
 })();
 </script>

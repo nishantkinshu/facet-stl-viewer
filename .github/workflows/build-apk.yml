@@ -22,6 +22,14 @@ jobs:
       - name: Copy viewer page into the app
         run: python3 tools/build_web.py
 
+      # The app's signing key lives in the repository secret FACET_KEYSTORE (kept private, never in the code).
+      # With it, every build is signed the same way, so new APKs install over old ones as updates.
+      - name: Restore signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.FACET_KEYSTORE }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then echo "$KEYSTORE_B64" | base64 -d > app/facet-debug.keystore; echo "Signing key restored"; else echo "No FACET_KEYSTORE secret: using a temporary key"; fi
+
       - name: Build the APK
         run: |
           chmod +x gradlew
