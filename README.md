@@ -53,3 +53,7 @@ app/src/main/...        the Android wrapper around the viewer
 tools/build_web.py      copies the viewer into the Android app
 .github/workflows/      instructions GitHub follows to build the APK
 ```
+
+## License
+
+Facet is open source under the [MIT License](LICENSE): free to use, change and share, as long as the license notice is kept. The bundled 3D library (three.js) is also MIT, and the fonts use the SIL Open Font License (see `web/lib` and `web/fonts`).
